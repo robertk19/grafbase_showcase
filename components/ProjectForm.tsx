@@ -21,7 +21,7 @@ const ProjectForm = ({ type, session }: Props) => {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setIsisSubmitting(true);
+    setIsSubmitting(true);
 
     const { token } = await fetchToken();
 
@@ -34,7 +34,7 @@ const ProjectForm = ({ type, session }: Props) => {
     } catch (error) {
       console.log(error);
     } finally {
-      setIsisSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -68,7 +68,7 @@ const ProjectForm = ({ type, session }: Props) => {
 
   const image = null;
 
-  const [isSubmitting, setIsisSubmitting] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [form, setform] = useState({
     title: "",
     description: "",

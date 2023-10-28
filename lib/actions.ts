@@ -51,18 +51,20 @@ export const fetchToken = async () => {
   }
 }
 
+
 export const uploadImage = async (imagePath: string) => {
   try {
     const response = await fetch(`${serverUrl}/api/upload`, {
-      method: 'POST',
-      body: JSON.stringify({ path: imagePath})
-    })
-
+      method: "POST",
+      body: JSON.stringify({
+        path: imagePath,
+      }),
+    });
     return response.json();
-  } catch (error) {
-    throw error;
+  } catch (err) {
+    throw err;
   }
-}
+};
 
 export const createNewProject = async (form: ProjectForm, creatorId: string, token: string) => {
   const imageUrl = await uploadImage(form.image)
