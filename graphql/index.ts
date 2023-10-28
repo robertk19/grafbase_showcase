@@ -1,5 +1,5 @@
 export const getUserQuery = `
-    query GetUser(@email: String!) {
+    query GetUser($email: String!) {
         user(by: {email: $email}) {
             id
             name 
@@ -7,7 +7,7 @@ export const getUserQuery = `
             avatarUrl
             description
             githubUrl
-            linkedinUrl
+            linkedInUrl
         }
     }
 `;
@@ -21,7 +21,7 @@ export const createUserMutation = `
                 avatarUrl
                 description
                 githubUrl
-                linkedinUrl
+                linkedInUrl
                 id
             }
         }
