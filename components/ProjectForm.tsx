@@ -22,7 +22,7 @@ const ProjectForm = ({ type, session, project }: Props) => {
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    setIsSubmitting(true);
+    setSubmitting(true);
 
     const { token } = await fetchToken();
 
@@ -41,7 +41,7 @@ const ProjectForm = ({ type, session, project }: Props) => {
     } catch (error) {
       console.log(error);
     } finally {
-      setIsSubmitting(false);
+      setSubmitting(false);
     }
   };
 
@@ -75,7 +75,7 @@ const ProjectForm = ({ type, session, project }: Props) => {
 
   const image = null;
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [form, setform] = useState({
     title: project?.title || "",
     description: project?.description || "",
@@ -149,13 +149,13 @@ const ProjectForm = ({ type, session, project }: Props) => {
       <div className="flexStart w-full ">
         <Button
           title={
-            isSubmitting
+            submitting
               ? `${type === "create" ? "Creating" : "Editing"}`
               : `${type === "create" ? "Create" : "Edit"}`
           }
           type="submit"
-          leftIcon={isSubmitting ? "" : "/plus.svg"}
-          isSubmitting={isSubmitting}
+          leftIcon={submitting ? "" : "/plus.svg"}
+          submitting={submitting}
         />
       </div>
     </form>
