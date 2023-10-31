@@ -11,16 +11,10 @@ import {
 import { GraphQLClient } from "graphql-request";
 import { ProjectForm } from "@/common.types";
 
-const isProduction = process.env.NODE_ENV === "production";
-const apiUrl = isProduction
-  ? process.env.NEXT_PUBLICK_GRAFBASE_API_URL || ""
-  : "http://127.0.0.1:4000/graphql";
-const apiKey = isProduction
-  ? process.env.NEXT_PUBLIC_GRAFBASE_API_URL || ""
-  : "letmein";
-const serverUrl = isProduction
-  ? process.env.NEXT_PUBLIC_SERVER_URL
-  : "http://localhost:3000";
+const isProduction = process.env.NODE_ENV === 'production';
+const apiUrl = isProduction ? process.env.NEXT_PUBLIC_GRAFBASE_API_URL || '' : 'http://127.0.0.1:4000/graphql';
+const apiKey = isProduction ? process.env.NEXT_PUBLIC_GRAFBASE_API_KEY || '' : 'letmein';
+const serverUrl = isProduction ? process.env.NEXT_PUBLIC_SERVER_URL : 'http://localhost:3000';
 
 const client = new GraphQLClient(apiUrl);
 
@@ -96,13 +90,10 @@ export const createNewProject = async (
   }
 };
 
-export const fetchAllProjects = async (
-  category?: string,
-  endCursor?: string
-) => {
+export const fetchAllProjects = (category?: string | null, endcursor?: string | null) => {
   client.setHeader("x-api-key", apiKey);
 
-  return makeGraphQLRequest(projectsQuery, { category, endCursor });
+  return makeGraphQLRequest(projectsQuery, { category, endcursor });
 };
 
 export const getProjectDetails = (id: string) => {
