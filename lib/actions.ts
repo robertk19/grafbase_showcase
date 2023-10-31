@@ -1,8 +1,12 @@
 import {
   createProjectMutation,
   createUserMutation,
+  deleteProjectMutation,
+  getProjectByIdQuery,
+  getProjectsOfUserQuery,
   getUserQuery,
   projectsQuery,
+  updateProjectMutation,
 } from "@/graphql";
 import { GraphQLClient } from "graphql-request";
 import { ProjectForm } from "@/common.types";
@@ -100,3 +104,60 @@ export const fetchAllProjects = async (
 
   return makeGraphQLRequest(projectsQuery, { category, endcursor });
 };
+
+export const getProjectDetails = (id: string) => {
+  client.setHeader("x-api-key", apiKey);
+  return makeGraphQLRequest(getProjectByIdQuery, { id });
+}
+
+export const getUserProjects = (id: string, last?: number) => {
+  client.setHeader("x-api-key", apiKey);
+  return makeGraphQLRequest(getProjectsOfUserQuery, { id, last });
+}
+
+export const deleteProject = (id: string, token: string ) => {
+  client.setHeader("Authorization", `Bearer ${token}`);
+  return makeGraphQLRequest(deleteProjectMutation, { id });
+}
+
+export const updateProject = async (form: ProjectForm, projectId: string, token: string ) => {
+
+  function isBase64Url(input: string) {
+    // Define a regular expression pattern for Base64 URL
+    const base64UrlPattern = /^[A-Za-z0-9_-]*$/;
+  
+    // Check if the string matches the Base64 URL pattern
+    if (!base64UrlPattern.test(input)) {
+      return false;
+    }
+  
+    // Check if the string has the correct length for Base64 encoding
+    const padding = input.endsWith("==") ? 2 : input.endsWith("=") ? 1 : 0;
+    const validLength = input.length % 4 === padding;
+  
+    return validLength;
+  }
+
+  let updatedForm = { ...form };
+
+  const isUploadingNewImage = isBase64Url(form.image)
+
+  if(isUploadingNewImage) {
+    const imageUrl = await uploadImage(form.image)
+
+    if(imageUrl.url) {
+      updatedForm = {
+        ...form,
+        image: imageUrl.url
+      }
+    }
+  }
+
+  const variables = {
+    id: projectId,
+    input: updatedForm
+  }
+
+  client.setHeader("Authorization", `Bearer ${token}`);
+  return makeGraphQLRequest(updateProjectMutation, variables);
+}
